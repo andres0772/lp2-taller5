@@ -1,12 +1,17 @@
 # web/app/main.py
-from flask import Flask, render_template, redirect
+from flask import Flask, render_template, redirect, request, jsonify
 import sqlite3
 from pprint import pprint
+from fastapi import FastAPI, Depends
+from sqlalchemy import create_engine, Column, Integer, String, Text, ForeignKey
+from sqlalchemy.ext.declarative import declarative_base
+from sqlalchemy.orm import sessionmaker, relationship, Session
 
-
-conexion = sqlite3.connect('web2.sqlite3')
-conexion.row_factory = sqlite3.Row #modo diccionario
-cursor = conexion.cursor()
+# conexión a la base de datos
+def get_connection():
+    conn = sqlite3.connect("blog.sqlite3")
+    conn.row_factory = sqlite3.Row
+    return conn
 
 
 # aplicación
