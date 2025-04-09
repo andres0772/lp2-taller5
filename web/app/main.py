@@ -1,30 +1,24 @@
-# web/app/main.py
-from flask import Flask, render_template, redirect, request, jsonify
-import sqlite3
-from pprint import pprint
-from fastapi import FastAPI, Depends
-from sqlalchemy import create_engine, Column, Integer, String, Text, ForeignKey
-from sqlalchemy.ext.declarative import declarative_base
-from sqlalchemy.orm import sessionmaker, relationship, Session
+from flask import Flask, render_template, request
+import requests
 
-# conexión a la base de datos
-def get_connection():
-    conn = sqlite3.connect("blog.sqlite3")
-    conn.row_factory = sqlite3.Row
-    return conn
-
-
-# aplicación
 app = Flask(__name__)
 
+# La URL de la API donde Flask realizará las solicitudes (esto podría estar configurado en un archivo de entorno)
+API_URL = "http://api:8000"  # Asegúrate de que la URL es correcta
 
-# rutas
 @app.route('/')
-def ruta_raiz():
-  return render_template('index.html')
+def index():
+    # Hacemos una solicitud a la API para obtener la lista de usuarios
+    response = requests.get(f"{API_URL}/users")
+    
+    # Si la respuesta es exitosa (200 OK)
+    if response.status_code == 200:
+        users = response.json()  # Convierte la respuesta en formato JSON
+    else:
+        users = []
+    
+    # Renderiza una plantilla con los datos de los usuarios
+    return render_template("index.html", users=users)
 
-
-
-# programa principal
 if __name__ == '__main__':
-  app.run(host='0.0.0.0', debug=True)
+    app.run(debug=True, host='0.0.0.0', port=5000)
