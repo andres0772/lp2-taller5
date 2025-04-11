@@ -110,7 +110,11 @@ class ComentarioResponse(ComentarioBase):
 
 @app.get("/users", response_model=List[UsuarioResponse])
 def list_users(skip: int = 0, limit: int = 10, db: Session = Depends(get_db)):
-    return db.query(Usuario).offset(skip).limit(limit).all()
+    users = db.query(Usuario).offset(skip).limit(limit).all()
+    # Convertir fecha_creacion a string
+    for user in users:
+        user.fecha_creacion = user.fecha_creacion.isoformat()
+    return users
 
 @app.get("/posts", response_model=List[PublicacionResponse])
 def list_posts(
@@ -143,3 +147,6 @@ def list_comments(
 @app.get("/")
 def read_root():
     return {"message": "Bienvenido a la API del Blog"}
+
+# se usa uvicorn app.main:app --reload para encenderlo
+#http://127.0.0.1:8000/docs
