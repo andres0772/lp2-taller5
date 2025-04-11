@@ -1,6 +1,6 @@
 from fastapi import FastAPI, Depends, HTTPException, Query
 from sqlalchemy import create_engine, Column, Integer, String, Text, ForeignKey, TIMESTAMP, func, asc, desc
-from sqlalchemy.ext.declarative import declarative_base
+from sqlalchemy.orm import declarative_base
 from sqlalchemy.orm import sessionmaker, relationship, Session
 from dotenv import load_dotenv
 from pydantic import BaseModel
@@ -76,7 +76,7 @@ class UsuarioResponse(UsuarioBase):
     fecha_creacion: str
 
     class Config:
-        orm_mode = True
+        from_attributes = True
 
 # Esquema para Publicaciones
 class PublicacionBase(BaseModel):
@@ -90,7 +90,7 @@ class PublicacionResponse(PublicacionBase):
     id_usuario: int
 
     class Config:
-        orm_mode = True
+       from_attributes = True
 
 # Esquema para Comentarios
 class ComentarioBase(BaseModel):
@@ -103,7 +103,7 @@ class ComentarioResponse(ComentarioBase):
     id_usuario: int
 
     class Config:
-        orm_mode = True
+        from_attributes = True
 
 # ENDPOINTS CRUD CON PAGINACIÓN, FILTRADO Y ORDENACIÓN
 
@@ -116,7 +116,7 @@ def list_users(skip: int = 0, limit: int = 10, db: Session = Depends(get_db)):
 def list_posts(
     skip: int = 0,
     limit: int = 10,
-    sort_order: str = Query("asc", regex="^(asc|desc)$"),
+    sort_order: str = Query("asc", pattern ="^(asc|desc)$"),
     db: Session = Depends(get_db)
 ):
     query = db.query(Publicacion)
