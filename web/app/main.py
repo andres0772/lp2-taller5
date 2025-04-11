@@ -4,7 +4,7 @@ import requests
 app = Flask(__name__)
 
 # La URL de la API donde Flask realizará las solicitudes (esto podría estar configurado en un archivo de entorno)
-API_URL = "http://api:8000"  # Asegúrate de que la URL es correcta
+API_URL = "http://localhost:8000"  # Asegúrate de que la URL es correcta
 
 @app.route('/')
 def index():
