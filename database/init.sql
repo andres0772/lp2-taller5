@@ -1,8 +1,14 @@
-CREATE DATABASE blog;
+DO $$
+BEGIN
+    IF NOT EXISTS (SELECT FROM pg_database WHERE datname = 'blog') THEN
+        CREATE DATABASE blog;
+    END IF;
+END$$;
+
 \c blog;
 
 -- Crear la tabla de usuarios
-CREATE TABLE usuarios (
+CREATE TABLE  IF NOT EXISTS usuarios (
     id SERIAL PRIMARY KEY,
     usuario VARCHAR(50) UNIQUE NOT NULL,
     nombre VARCHAR(100) NOT NULL,
@@ -13,7 +19,7 @@ CREATE TABLE usuarios (
 );
 
 -- Crear la tabla de publicaciones
-CREATE TABLE publicaciones (
+CREATE TABLE IF NOT EXISTS publicaciones (
     id SERIAL PRIMARY KEY,
     titulo VARCHAR(255) NOT NULL,
     contenido TEXT NOT NULL,
@@ -23,7 +29,7 @@ CREATE TABLE publicaciones (
 );
 
 -- Crear la tabla de comentarios
-CREATE TABLE comentarios (
+CREATE TABLE IF NOT EXISTS comentarios (
     id SERIAL PRIMARY KEY,
     comentario TEXT NOT NULL,
     id_publicacion INT REFERENCES publicaciones(id) ON DELETE CASCADE,
@@ -40,6 +46,7 @@ INSERT INTO usuarios (usuario, nombre, correo, password) VALUES
 ('juan23', 'Juan Martínez', 'juan23@example.com', 'hashed_password3'),
 ('sofia99', 'Sofía López', 'sofia99@example.com', 'hashed_password4'),
 ('mario_king', 'Mario Rodríguez', 'mario_king@example.com', 'hashed_password5');
+ON CONFLICT (usuario) DO NOTHING;
 
 -- Insertar publicaciones de prueba
 INSERT INTO publicaciones (titulo, contenido, url_imagen, id_usuario) VALUES
@@ -48,6 +55,7 @@ INSERT INTO publicaciones (titulo, contenido, url_imagen, id_usuario) VALUES
 ('¿Vale la pena Linux?', 'Comparación de Windows, Mac y Linux...', NULL, 3),
 ('Mi experiencia con Docker', 'Configurando contenedores en mi proyecto...', NULL, 4),
 ('Cómo aprender a programar', 'Consejos para principiantes en programación...', NULL, 5);
+ON CONFLICT DO NOTHING;
 
 -- Insertar comentarios de prueba
 INSERT INTO comentarios (comentario, id_publicacion, id_usuario) VALUES
@@ -56,3 +64,4 @@ INSERT INTO comentarios (comentario, id_publicacion, id_usuario) VALUES
 ('Prefiero Windows, pero buen análisis.', 3, 4),
 ('Voy a probar esto en mi proyecto.', 4, 1),
 ('Me encantó la guía para principiantes.', 5, 2);
+ON CONFLICT DO NOTHING;
