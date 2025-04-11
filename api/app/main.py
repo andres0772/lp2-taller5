@@ -107,74 +107,37 @@ class ComentarioResponse(ComentarioBase):
 
 # ENDPOINTS CRUD CON PAGINACIÓN, FILTRADO Y ORDENACIÓN
 
-# Usuarios
+# Endpoints CRUD con paginación, filtrado y ordenación
 @app.get("/users", response_model=List[UsuarioResponse])
-def get_users(
-    nombre: Optional[str] = None,
-    correo: Optional[str] = None,
-    limit: int = Query(default=10, ge=1),
-    offset: int = Query(default=0, ge=0),
-    order_by: str = Query(default="id"),
-    order: str = Query(default="asc"),
-    db: Session = Depends(get_db)
-):
-    query = db.query(Usuario)
-    if nombre:
-        query = query.filter(Usuario.nombre.like(f"%{nombre}%"))
-    if correo:
-        query = query.filter(Usuario.correo.like(f"%{correo}%"))
-    if order == "asc":
-        query = query.order_by(asc(getattr(Usuario, order_by, "id")))
-    else:
-        query = query.order_by(desc(getattr(Usuario, order_by, "id")))
-    return query.offset(offset).limit(limit).all()
+def list_users(skip: int = 0, limit: int = 10, db: Session = Depends(get_db)):
+    return db.query(Usuario).offset(skip).limit(limit).all()
 
-# Publicaciones
 @app.get("/posts", response_model=List[PublicacionResponse])
-def get_posts(
-    titulo: Optional[str] = None,
-    id_usuario: Optional[int] = None,
-    limit: int = Query(default=10, ge=1),
-    offset: int = Query(default=0, ge=0),
-    order_by: str = Query(default="id"),
-    order: str = Query(default="asc"),
+def list_posts(
+    skip: int = 0,
+    limit: int = 10,
+    sort_order: str = Query("asc", regex="^(asc|desc)$"),
     db: Session = Depends(get_db)
 ):
     query = db.query(Publicacion)
-    if titulo:
-        query = query.filter(Publicacion.titulo.like(f"%{titulo}%"))
-    if id_usuario:
-        query = query.filter(Publicacion.id_usuario == id_usuario)
-    if order == "asc":
-        query = query.order_by(asc(getattr(Publicacion, order_by, "id")))
+    if sort_order == "asc":
+        query = query.order_by(asc(Publicacion.fecha_creacion))
     else:
-        query = query.order_by(desc(getattr(Publicacion, order_by, "id")))
-    return query.offset(offset).limit(limit).all()
+        query = query.order_by(desc(Publicacion.fecha_creacion))
+    return query.offset(skip).limit(limit).all()
 
-# Comentarios
 @app.get("/comments", response_model=List[ComentarioResponse])
-def get_comments(
-    comentario: Optional[str] = None,
-    id_publicacion: Optional[int] = None,
-    id_usuario: Optional[int] = None,
-    limit: int = Query(default=10, ge=1),
-    offset: int = Query(default=0, ge=0),
-    order_by: str = Query(default="id"),
-    order: str = Query(default="asc"),
+def list_comments(
+    post_id: Optional[int] = None,
+    skip: int = 0,
+    limit: int = 10,
     db: Session = Depends(get_db)
 ):
     query = db.query(Comentario)
-    if comentario:
-        query = query.filter(Comentario.comentario.like(f"%{comentario}%"))
-    if id_publicacion:
-        query = query.filter(Comentario.id_publicacion == id_publicacion)
-    if id_usuario:
-        query = query.filter(Comentario.id_usuario == id_usuario)
-    if order == "asc":
-        query = query.order_by(asc(getattr(Comentario, order_by, "id")))
-    else:
-        query = query.order_by(desc(getattr(Comentario, order_by, "id")))
-    return query.offset(offset).limit(limit).all()
+    if post_id:
+        query = query.filter(Comentario.id_publicacion == post_id)
+    return query.offset(skip).limit(limit).all()
+
 
 # Endpoint raíz
 @app.get("/")
