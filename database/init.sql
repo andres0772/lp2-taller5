@@ -45,7 +45,7 @@ INSERT INTO usuarios (usuario, nombre, correo, password) VALUES
 ('lina89', 'Lina Gómez', 'lina89@example.com', 'hashed_password2'),
 ('juan23', 'Juan Martínez', 'juan23@example.com', 'hashed_password3'),
 ('sofia99', 'Sofía López', 'sofia99@example.com', 'hashed_password4'),
-('mario_king', 'Mario Rodríguez', 'mario_king@example.com', 'hashed_password5');
+('mario_king', 'Mario Rodríguez', 'mario_king@example.com', 'hashed_password5')
 ON CONFLICT (usuario) DO NOTHING;
 
 -- Insertar publicaciones de prueba
@@ -54,7 +54,7 @@ INSERT INTO publicaciones (titulo, contenido, url_imagen, id_usuario) VALUES
 ('Tecnología 2025', 'Las tendencias de tecnología en 2025 incluyen...', NULL, 2),
 ('¿Vale la pena Linux?', 'Comparación de Windows, Mac y Linux...', NULL, 3),
 ('Mi experiencia con Docker', 'Configurando contenedores en mi proyecto...', NULL, 4),
-('Cómo aprender a programar', 'Consejos para principiantes en programación...', NULL, 5);
+('Cómo aprender a programar', 'Consejos para principiantes en programación...', NULL, 5)
 ON CONFLICT DO NOTHING;
 
 -- Insertar comentarios de prueba
@@ -63,5 +63,5 @@ INSERT INTO comentarios (comentario, id_publicacion, id_usuario) VALUES
 ('Gracias por la información.', 2, 3),
 ('Prefiero Windows, pero buen análisis.', 3, 4),
 ('Voy a probar esto en mi proyecto.', 4, 1),
-('Me encantó la guía para principiantes.', 5, 2);
+('Me encantó la guía para principiantes.', 5, 2)
 ON CONFLICT DO NOTHING;
