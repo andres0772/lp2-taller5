@@ -107,7 +107,7 @@ class ComentarioResponse(ComentarioBase):
 
 # ENDPOINTS CRUD CON PAGINACIÓN, FILTRADO Y ORDENACIÓN
 
-# Endpoints CRUD con paginación, filtrado y ordenación
+
 @app.get("/users", response_model=List[UsuarioResponse])
 def list_users(skip: int = 0, limit: int = 10, db: Session = Depends(get_db)):
     return db.query(Usuario).offset(skip).limit(limit).all()
