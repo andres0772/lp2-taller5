@@ -1,6 +1,7 @@
 version: '3.8'
 
 services:
+  # Base de datos PostgreSQL
   postgres:
     image: postgres:latest
     container_name: blog_db
@@ -15,6 +16,51 @@ services:
       - postgres_data:/var/lib/postgresql/data
       - ./database/init.sql:/docker-entrypoint-initdb.d/init.sql
 
+  # API FastAPI
+  api:
+    build:
+      context: ./api
+      dockerfile: Dockerfile
+    container_name: blog_api
+    restart: always
+    ports:
+      - "8000:8000"
+    depends_on:
+      - postgres
+    environment:
+      DATABASE_URL: postgresql+psycopg2://admin:admin@postgres:5432/blog
+    volumes:
+      - ./api:/app
+
+  # Aplicación Web Flask
+  web:
+    build:
+      context: ./web
+      dockerfile: Dockerfile
+    container_name: blog_web
+    restart: always
+    ports:
+      - "5000:5000"
+    depends_on:
+      - api
+    volumes:
+      - ./web:/app
+
+  # Proxy Nginx
+  proxy:
+    build:
+      context: ./proxy
+      dockerfile: Dockerfile
+    container_name: blog_proxy
+    restart: always
+    ports:
+      - "80:80"
+    depends_on:
+      - web
+      - api
+    volumes:
+      - ./proxy/nginx.conf:/etc/nginx/nginx.conf
+      - ./web:/app
 
 volumes:
   postgres_data:
