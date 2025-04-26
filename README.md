@@ -10,7 +10,7 @@ Este taller práctico te guiará en el desarrollo de un sitio web tipo **Blog**,
 ## Autores
 
 - [andres esteban vasquez peña](https://www.github.com/estudiante1)
-- [@estudiante2](https://www.github.com/estudiante2)
+- [Javier Mauricio Llanos Atoy](https://www.github.com/estudiante2)
 
 ## Descripción del Proyecto
 
