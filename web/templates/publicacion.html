@@ -1,0 +1,18 @@
+<!-- templates/publicacion.html -->
+<!DOCTYPE html>
+<html>
+<head><title>{{ publicacion.titulo }}</title></head>
+<body>
+    <h1>{{ publicacion.titulo }}</h1>
+    <p>{{ publicacion.contenido }}</p>
+
+    <h2>Comentarios</h2>
+    <ul>
+    {% for comentario in comentarios %}
+        <li>{{ comentario }}</li>
+    {% endfor %}
+    </ul>
+
+    <a href="/">Volver</a>
+</body>
+</html>
