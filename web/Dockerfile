@@ -1,3 +1,5 @@
+# Dockerfile para el servicio web (Flask)
+
 FROM python:3.9-slim
 
 WORKDIR /app
@@ -10,7 +12,4 @@ COPY . /app/
 
 EXPOSE 5000
 
-# Agregamos la variable de entorno FLASK_APP
-ENV FLASK_APP=app/main.py
-
-CMD ["flask", "run", "--host=0.0.0.0", "--port=5000"]
+CMD ["python", "app/main.py"]
