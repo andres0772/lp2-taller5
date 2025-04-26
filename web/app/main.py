@@ -1,24 +1,20 @@
+# web/app/main.py
 from flask import Flask, render_template, request
 import requests
 
 app = Flask(__name__)
 
-# La URL de la API donde Flask realizará las solicitudes (esto podría estar configurado en un archivo de entorno)
-API_URL = "http://localhost:8000"  # Asegúrate de que la URL es correcta
+API_URL = "http://api:8000"  # Asegúrate de que sea el nombre del servicio en Docker
 
-@app.route('/')
-def index():
-    # Hacemos una solicitud a la API para obtener la lista de usuarios
-    response = requests.get(f"{API_URL}/users")
-    
-    # Si la respuesta es exitosa (200 OK)
-    if response.status_code == 200:
-        users = response.json()  # Convierte la respuesta en formato JSON
-    else:
-        users = []
-    
-    # Renderiza una plantilla con los datos de los usuarios
-    return render_template("index.html", users=users)
+@app.route("/")
+def home():
+    publicaciones = requests.get(f"{API_URL}/publicaciones").json()
+    return render_template("index.html", publicaciones=publicaciones)
 
-if __name__ == '__main__':
-    app.run(debug=True, host='0.0.0.0', port=5000)
+@app.route("/publicacion/<int:id>")
+def publicacion(id):
+    pub = requests.get(f"{API_URL}/publicaciones").json()
+    comentarios = requests.get(f"{API_URL}/comentarios/{id}").json()
+    publicacion = next((p for p in pub if p["id"] == id), None)
+    return render_template("publicacion.html", publicacion=publicacion, comentarios=comentarios)
+
