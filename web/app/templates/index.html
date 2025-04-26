@@ -1,14 +1,16 @@
 <!DOCTYPE html>
-<html>
+<html lang="es">
 <head>
+    <meta charset="UTF-8">
     <title>Blog</title>
 </head>
 <body>
     <h1>Publicaciones</h1>
     <ul>
-    {% for pub in publicaciones %}
-        <li><a href="/publicacion/{{ pub.id }}">{{ pub.titulo }}</a></li>
-    {% endfor %}
+        {% for pub in publicaciones %}
+            <li><a href="/Publicacion/{{ pub.id }}">{{ pub.titulo }}</a></li>
+        {% endfor %}
     </ul>
 </body>
 </html>
+

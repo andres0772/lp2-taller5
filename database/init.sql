@@ -76,3 +76,5 @@ INSERT INTO comentarios (comentario, id_publicacion, id_usuario) VALUES
 ('Voy a probar esto en mi proyecto.', 4, 1),
 ('Me encantó la guía para principiantes.', 5, 2)
 ON CONFLICT DO NOTHING;
+
+

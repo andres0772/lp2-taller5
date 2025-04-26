@@ -150,3 +150,4 @@ def read_root():
 
 # se usa uvicorn app.main:app --reload para encenderlo
 #http://127.0.0.1:8000/docs
+
