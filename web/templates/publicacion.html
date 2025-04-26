@@ -1,18 +1,21 @@
 
 <!DOCTYPE html>
 <html>
-<head><title>{{ Publicacion.titulo }}</title></head>
+<head>
+    <title>{{ publicacion.titulo }}</title>
+</head>
 <body>
-    <h1>{{ Publicacion.titulo }}</h1>
-    <p>{{ Publicacion.contenido }}</p>
+    <h1>{{ publicacion.titulo }}</h1>
+    <p>{{ publicacion.contenido }}</p>
 
     <h2>Comentarios</h2>
     <ul>
     {% for comentario in comentarios %}
-        <li>{{ Comentario }}</li>
+        <li>{{ comentario.comentario }}</li>
     {% endfor %}
     </ul>
 
     <a href="/">Volver</a>
 </body>
 </html>
+
